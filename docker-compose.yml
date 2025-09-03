@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: now_db
+      POSTGRES_USER: now_user
+      POSTGRES_PASSWORD: now_pass
+    ports:
+      - "5432:5432"  # optional; allows host tools (psql/GUI) to connect
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U now_user -d now_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app              # live-reload; mirror repo into container
+      - /app/node_modules   # keep container's node_modules, avoid host shadowing
+    command: >
+      sh -c "npx prisma migrate dev --name init_auth &&
+             npx prisma generate &&
+             npm run dev"
+
+volumes:
+  pgdata:
