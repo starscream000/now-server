@@ -23,6 +23,7 @@ services:
         condition: service_healthy
     ports:
       - "3000:3000"
+      - "5555:5555"
     volumes:
       - .:/app              # live-reload; mirror repo into container
       - /app/node_modules   # keep container's node_modules, avoid host shadowing
