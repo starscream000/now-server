@@ -1,0 +1,29 @@
+services:
+  database:
+    image: timescale/timescaledb-ha:pg17
+    container_name: now-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=now_db
+    volumes:
+      - ./docker-data/timescale:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d now_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: now-api
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://myuser:mypassword@database:5432/now_db?schema=public
+      - NODE_ENV=production
+    depends_on:
+      database:
+        condition: service_healthy

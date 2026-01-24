@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    /* Base Options: Node 22 + Fastify */
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": [
+      "ES2022"
+    ],
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true, /* Crucial for Prisma/Fastify type compatibility */
+    /* Strictness */
+    "strict": true,
+    "noImplicitAny": true,
+    /* Project Structure */
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": ".",
+    /* Allow importing JSON (useful for config) */
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "**/*.spec.ts"
+  ]
+}

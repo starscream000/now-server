@@ -1,0 +1,36 @@
+src/generated/
+
+.env
+.env.local
+
+# --- Node.js Standard ---
+node_modules/
+npm-debug.log*
+yarn-error.log*
+package-lock.json
+# (Optional: keep package-lock if you want exact version parity across devices)
+
+# --- TypeScript ---
+dist/
+build/
+*.tsbuildinfo
+
+# --- Prisma / Database ---
+# Avoid committing SQLite files if you ever use them for testing
+*.db
+*.db-journal
+
+# --- Docker ---
+# If you use a local data volume for your TimescaleDB container
+docker-data/
+
+# --- OS / IDE ---
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.log
+
+# --- Resident App / Build Artifacts ---
+# If you eventually use Tauri for your high-tech helmet/resident app
+src-tauri/target/
