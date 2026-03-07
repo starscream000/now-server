@@ -15,13 +15,14 @@
     "noImplicitAny": true,
     /* Project Structure */
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "baseUrl": ".",
     /* Allow importing JSON (useful for config) */
     "resolveJsonModule": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "prisma.config.ts"
   ],
   "exclude": [
     "node_modules",

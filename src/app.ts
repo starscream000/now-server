@@ -18,10 +18,11 @@ const server = Fastify({ logger: true })
 async function bootstrap() {
     await server.register(prismaPlugin);
     await server.register(logRoutes, { prefix: '/api/logs' });
+    await server.register(() => { }, { prefix: '/api/hud-android' })
 
     try {
-        await server.listen({ port: 3000 });
-        console.log('Mind-Logger is active on http://localhost:3000');
+        await server.listen({ host: '0.0.0.0', port: 3000 });
+        console.log('Logger active on http://localhost:3000');
     } catch (err) {
         server.log.error(err);
         process.exit(1);

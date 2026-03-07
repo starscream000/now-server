@@ -1,0 +1,29 @@
+services:
+  database:
+    image: timescale/timescaledb-ha:pg17
+    container_name: now-db-prod # Unique name for Prod
+    restart: always
+    ports:
+      - "5433:5432" # Exposed on Host 5433 (Dev uses 5432)
+    env_file:
+      - prod.env
+    volumes:
+      - ./docker-data/prod-timescale:/var/lib/postgresql/data
+    healthcheck:
+      # Uses variables from prod.env to check the right DB
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: now-api-prod # Unique name for Prod
+    restart: always
+    ports:
+      - "3001:3000" # Exposed on Host 3001 (Dev uses 3000)
+    env_file:
+      - prod.env
+    depends_on:
+      database:
+        condition: service_healthy
