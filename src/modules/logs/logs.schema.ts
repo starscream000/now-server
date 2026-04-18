@@ -1,7 +1,7 @@
-import { stat } from 'node:fs';
+
 import { z } from 'zod';
 
-const TodoPayload = z.object({
+export const TodoPayload = z.object({
     horizon: z.enum(['short', 'medium', 'long']),
     priority: z.number().min(1).max(5).default(3),
     deadline: z.iso.datetime().optional(),
@@ -13,7 +13,7 @@ const SocialPayload = z.object({
     isDraft: z.boolean().default(true),
 });
 
-const TransactionPayload = z.object({
+export const TransactionPayload = z.object({
     amount: z.number().positive(),
     currency: z.string().length(3).default('USD'),
     type: z.enum(['income', 'expense']),
@@ -28,15 +28,19 @@ export const logSchema = z.discriminatedUnion('category', [
 export const hudResponeSchema = z.object({
 
     data: z.object({
-        nowTaskData: z.object({
-            now: z.string().optional(),
+        nowTaskData: TodoPayload.partial().extend({ now: z.string().optional() }),
 
+        transactionData: z.object({
+            summary: z.object({
+                today: z.number(),
+                thisWeek: z.number(),
+                thisMonth: z.number(),
+            }), data: z.array(z.object({
+            })).optional(),
         }),
-
-        transactionData: z.object({ summary: z.object({}), data: z.array(z.object({})).optional(), }),
     }),
 });
 
-
+export type TodoPayloadType = z.infer<typeof TodoPayload>;
 // Type inferred for your new 'Log' naming
 export type LogInput = z.infer<typeof logSchema>;

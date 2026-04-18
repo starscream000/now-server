@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { LogService } from './logs.service';
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
-import { logSchema, LogInput } from './logs.schema';
+import { logSchema } from './logs.schema';
 
 export async function logRoutes(fastify: FastifyInstance) {
     const server = fastify.withTypeProvider<ZodTypeProvider>();
@@ -9,7 +9,7 @@ export async function logRoutes(fastify: FastifyInstance) {
 
     const service = new LogService(fastify.prisma);
 
-    server.post('/', { schema: { body: LogInput } }, async (request, reply) => {
+    server.post('/', { schema: { body: logSchema } }, async (request, reply) => {
         const log = await service.createLog(request.body as any);
         return reply.code(201).send(log);
     });
@@ -27,7 +27,7 @@ export async function logRoutes(fastify: FastifyInstance) {
     });
 
     server.get('/hud-android', async (request, reply) => {
-        return { status: 'ok' };
+        return service.getHudData();
     });
 
 }
